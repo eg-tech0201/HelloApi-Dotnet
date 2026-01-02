@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using HelloApi.Dtos;
+using HelloApi.Services;
 
 namespace HelloApi.Controllers;
 
@@ -6,8 +8,17 @@ namespace HelloApi.Controllers;
 [Route("api/[controller]")]
 public class HelloController : ControllerBase
 {
+    private readonly IHelloService _service;
+
+    public HelloController(IHelloService service)
+    {
+        _service = service;
+    }
+
     [HttpGet]
-    public IActionResult Get([FromQuery] string? firstname)
+    public async Task<IActionResult> Get(
+        [FromQuery] string? firstname, 
+        CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(firstname))
         {
@@ -18,10 +29,13 @@ public class HelloController : ControllerBase
             });
         }
 
-        return Ok(new
+        var request = new HelloRequestDto
         {
-            firstname,
-            message = $"Hi {firstname}"
-        });
+            FirstName = firstname
+        };
+
+        HelloResponseDto response = await _service.SayHiAsync(request, cancellationToken);
+
+        return Ok(response);
     }
 }
