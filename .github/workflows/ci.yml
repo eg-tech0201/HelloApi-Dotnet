@@ -33,4 +33,4 @@ jobs:
           path: "**/TestResults/*.trx"
  
       - name: Build Docker image
-        run: docker build -t helloapi -f HelloApi/Dockerfile .
+        run: docker build -t helloapi-dotnet:ci .
