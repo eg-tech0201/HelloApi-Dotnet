@@ -2,7 +2,6 @@ name: CI
 
 on:
   push:
-    branches: [ "main" ]
   pull_request:
 
 jobs:
@@ -28,4 +27,4 @@ jobs:
         run: dotnet test --no-build -c Release
 
       - name: Build Docker image
-        run: docker build -t helloapi -f HelloApi/Dockerfile .
+        run: docker build -t helloapi-dotnet:ci .
